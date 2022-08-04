@@ -1,12 +1,28 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { config } from './config/config'
+import { FolderModule } from './models/folders/folder.module';
+import { UsersModule } from './models/users/user.module';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule,
+    UsersModule,
+    FolderModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: config.DB.HOST,
+      port: config.DB.PORT,
+      username: config.DB.USERNAME,
+      password: config.DB.PASSWORD,
+      database: config.DB.NAME,
+      autoLoadEntities: true,
+      synchronize: false,
+    }),],
   controllers: [AppController],
   providers: [AppService,
   {
