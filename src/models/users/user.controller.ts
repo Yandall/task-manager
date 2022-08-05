@@ -9,18 +9,6 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Public()
-  @Get()
-  findAll() {
-    return this.usersService.findAll()
-  }
-
-  @Public()
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.usersService.findOne(id)
-  }
-
-  @Public()
   @Post()
   @UseFilters(new PgExceptionFilter())
   create(@Body() userDto: CreateUserDto) {
