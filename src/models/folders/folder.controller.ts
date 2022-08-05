@@ -5,7 +5,7 @@ import { FoldersService } from "./folder.service";
 
 
 @Controller('folders')
-export class FolderController {
+export class FoldersController {
     constructor(private readonly foldersService: FoldersService) {}
 
     @Get()
