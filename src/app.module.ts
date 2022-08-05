@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { config } from './config/config'
+import { BoardsModule } from './models/boards/board.module';
 import { FolderModule } from './models/folders/folder.module';
 import { UsersModule } from './models/users/user.module';
 
@@ -13,6 +14,7 @@ import { UsersModule } from './models/users/user.module';
   imports: [AuthModule,
     UsersModule,
     FolderModule,
+    BoardsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: config.DB.HOST,
