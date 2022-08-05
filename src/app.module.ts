@@ -7,14 +7,16 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { config } from './config/config'
 import { BoardsModule } from './models/boards/board.module';
-import { FolderModule } from './models/folders/folder.module';
+import { FoldersModule } from './models/folders/folder.module';
+import { TagsModule } from './models/tags/tag.module';
 import { UsersModule } from './models/users/user.module';
 
 @Module({
   imports: [AuthModule,
     UsersModule,
-    FolderModule,
+    FoldersModule,
     BoardsModule,
+    TagsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: config.DB.HOST,
