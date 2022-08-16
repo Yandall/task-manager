@@ -1,17 +1,16 @@
 import { IsInt, IsString } from "class-validator";
 
 export class CreateBoardDto {
+  @IsString()
+  folderId: string;
 
-    @IsString()
-    folderId: string
+  @IsString()
+  folderPath: string;
 
-    @IsString()
-    folderPath: string
+  owner: number;
 
-    owner: number
+  config: { [key: string]: unknown };
 
-    config: unknown
-
-    @IsString()
-    name: string
+  @IsString()
+  name: string;
 }

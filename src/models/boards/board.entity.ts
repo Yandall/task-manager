@@ -10,16 +10,16 @@ export class Board {
   folderId: string;
 
   @Column()
-  folderPath: string
+  folderPath: string;
 
   @Column()
   owner: number;
 
   @Column({ type: "jsonb", default: {} })
-  config: unknown;
+  config: { [key: string]: unknown };
 
   @Column()
-  name: string
+  name: string;
 
   constructor() {
     this.id = randomId();

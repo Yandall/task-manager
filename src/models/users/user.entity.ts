@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from "bcrypt";
 
 @Entity({ name: "users" })
 export class User {
@@ -16,10 +16,10 @@ export class User {
   name: string;
 
   @Column({ type: "jsonb", default: {} })
-  config: unknown;
+  config: { [key: string]: unknown };
 
   hashPassword() {
-    const salt = bcrypt.genSaltSync()
-    this.password = bcrypt.hashSync(this.password, salt)
+    const salt = bcrypt.genSaltSync();
+    this.password = bcrypt.hashSync(this.password, salt);
   }
 }

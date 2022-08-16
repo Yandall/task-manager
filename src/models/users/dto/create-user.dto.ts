@@ -10,5 +10,5 @@ export class CreateUserDto {
   @IsString()
   name: string;
 
-  config: string;
+  config: { [key: string]: unknown };
 }

@@ -3,7 +3,7 @@ import { IsValidPath } from "src/common/decorators/validators";
 
 export class CreateFolderDto {
   @IsString()
-  @IsValidPath('name')
+  @IsValidPath("name")
   path: string;
 
   @IsString()
@@ -11,5 +11,5 @@ export class CreateFolderDto {
 
   owner: number;
 
-  config: unknown;
+  config: { [key: string]: unknown };
 }

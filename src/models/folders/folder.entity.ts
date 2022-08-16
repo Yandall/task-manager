@@ -16,9 +16,9 @@ export class Folder {
   owner: number;
 
   @Column({ type: "jsonb", default: {} })
-  config: unknown;
+  config: { [key: string]: unknown };
 
   constructor() {
-    this.id = randomId()
+    this.id = randomId();
   }
 }

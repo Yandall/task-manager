@@ -6,5 +6,5 @@ export class CreateTagDto {
 
   owner: number;
 
-  config: unknown;
+  config: { [key: string]: unknown };
 }
