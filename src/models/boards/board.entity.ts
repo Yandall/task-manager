@@ -1,3 +1,4 @@
+import { formatISO } from "date-fns";
 import { randomId } from "src/common/util";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
@@ -21,7 +22,11 @@ export class Board {
   @Column()
   name: string;
 
+  @Column()
+  createdDate: string;
+
   constructor() {
     this.id = randomId();
+    this.createdDate = formatISO(new Date());
   }
 }

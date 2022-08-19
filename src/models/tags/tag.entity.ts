@@ -1,3 +1,4 @@
+import { formatISO } from "date-fns";
 import { randomId } from "src/common/util";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
@@ -15,7 +16,11 @@ export class Tag {
   @Column({ type: "jsonb", default: {} })
   config: { [key: string]: unknown };
 
+  @Column()
+  createdDate: string;
+
   constructor() {
     this.id = randomId();
+    this.createdDate = formatISO(new Date());
   }
 }
