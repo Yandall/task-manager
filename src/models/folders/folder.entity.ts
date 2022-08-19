@@ -7,9 +7,6 @@ export class Folder {
   id: string;
 
   @Column()
-  path: string;
-
-  @Column()
   name: string;
 
   @Column()
