@@ -4,7 +4,7 @@ import { toIsoString } from "src/common/decorators/transformers";
 import { IsValidDate } from "src/common/decorators/validators";
 
 export class CreateTaskDto {
-  @IsValidDate({ always: true })
+  @IsValidDate({ always: false })
   @Transform(toIsoString)
   dueDate: string;
 
