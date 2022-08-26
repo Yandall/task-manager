@@ -1,11 +1,11 @@
 import { Transform } from "class-transformer";
 import { IsObject, IsString } from "class-validator";
-import { toIsoString } from "src/common/decorators/transformers";
+import { toISOString } from "src/common/decorators/transformers";
 import { IsValidDate } from "src/common/decorators/validators";
 
 export class CreateTaskDto {
   @IsValidDate({ always: false })
-  @Transform(toIsoString)
+  @Transform(toISOString)
   dueDate: string;
 
   owner: number;
