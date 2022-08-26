@@ -1,21 +1,31 @@
-import { Body, Controller, Get, Post, Request, UseFilters } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseInterceptors,
+} from "@nestjs/common";
 import { PgExceptionFilter } from "src/common/exceptions/pg-exception.filter";
+import { insertTransformInterceptor } from "src/common/interceptors/pg-transform.interceptor";
 import { CreateTagDto } from "./dto/create-tags.dto";
 import { TagsService } from "./tag.service";
 
-@Controller('tags')
+@Controller("tags")
 export class TagsController {
-    constructor(private tagsService: TagsService) {}
+  constructor(private tagsService: TagsService) {}
 
-    @Get()
-    getTags(@Request() req) {
-        return this.tagsService.getTagsByOwner(req.user.id)
-    }
+  @Get()
+  getTags(@Request() req) {
+    return this.tagsService.getTagsByOwner(req.user.id);
+  }
 
-    @Post()
-    @UseFilters(new PgExceptionFilter())
-    createTag(@Request() req, @Body() createTagDto: CreateTagDto) {
-        createTagDto.owner = req.user.id
-        return this.tagsService.createTag(createTagDto)
-    }
+  @Post()
+  @UseInterceptors(new insertTransformInterceptor())
+  createTag(@Request() req, @Body() createTagDto: CreateTagDto) {
+    createTagDto.owner = req.user.id;
+    const results = this.tagsService.createTag(createTagDto);
+    req.output = results.output;
+    return results.dbRes;
+  }
 }

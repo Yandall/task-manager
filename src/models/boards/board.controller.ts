@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Request } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseInterceptors,
+} from "@nestjs/common";
+import { insertTransformInterceptor } from "src/common/interceptors/pg-transform.interceptor";
 import { BoardsService } from "./board.service";
 import { CreateBoardDto } from "./dto/create-board.dto";
 
@@ -12,8 +20,11 @@ export class BoardsController {
   }
 
   @Post()
+  @UseInterceptors(new insertTransformInterceptor())
   createBoard(@Request() req, @Body() createBoardDto: CreateBoardDto) {
-    createBoardDto.owner = req.user.id
-    return this.boardsService.createBoard(createBoardDto)
+    createBoardDto.owner = req.user.id;
+    const results = this.boardsService.createBoard(createBoardDto);
+    req.output = results.output;
+    return results.dbResult;
   }
 }

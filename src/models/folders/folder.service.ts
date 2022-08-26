@@ -16,6 +16,9 @@ export class FoldersService {
 
   create(folderDto: CreateFolderDto) {
     const newFolder = this.folderRepository.create(folderDto);
-    return this.folderRepository.insert(newFolder);
+    return {
+      dbResult: this.folderRepository.insert(newFolder),
+      output: newFolder,
+    };
   }
 }

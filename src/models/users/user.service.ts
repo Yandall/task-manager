@@ -19,16 +19,16 @@ export class UsersService {
   }
 
   findOneByEmail(email: string) {
-    return this.userRepository.findOneBy({email})
+    return this.userRepository.findOneBy({ email });
   }
 
   create(userDto: CreateUserDto) {
-    const newUser = this.userRepository.create(userDto)
-    newUser.hashPassword()
-    return this.userRepository.insert(newUser)
+    const newUser = this.userRepository.create(userDto);
+    newUser.hashPassword();
+    return { dbRes: this.userRepository.insert(newUser), output: {} };
   }
 
   async remove(email: string) {
-    return this.userRepository.delete(email)
+    return this.userRepository.delete(email);
   }
 }

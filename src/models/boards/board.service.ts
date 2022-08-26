@@ -15,7 +15,10 @@ export class BoardsService {
   }
 
   createBoard(createBoardDto: CreateBoardDto) {
-    const newBoard = this.boardRepository.create(createBoardDto)
-    return this.boardRepository.insert(newBoard)
+    const newBoard = this.boardRepository.create(createBoardDto);
+    return {
+      dbResult: this.boardRepository.insert(newBoard),
+      output: newBoard,
+    };
   }
 }

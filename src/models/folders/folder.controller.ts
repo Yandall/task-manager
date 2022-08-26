@@ -1,22 +1,30 @@
-import { Body, Controller, Get, Post, Request, UseFilters } from "@nestjs/common";
-import { PgExceptionFilter } from "src/common/exceptions/pg-exception.filter";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseInterceptors,
+} from "@nestjs/common";
+import { insertTransformInterceptor } from "src/common/interceptors/pg-transform.interceptor";
 import { CreateFolderDto } from "./dto/create-folder.dto";
 import { FoldersService } from "./folder.service";
 
-
-@Controller('folders')
+@Controller("folders")
 export class FoldersController {
-    constructor(private readonly foldersService: FoldersService) {}
+  constructor(private readonly foldersService: FoldersService) {}
 
-    @Get()
-    findAll(@Request() req) {
-        return this.foldersService.findAll(req.user.id)
-    }
+  @Get()
+  findAll(@Request() req) {
+    return this.foldersService.findAll(req.user.id);
+  }
 
-    @Post()
-    @UseFilters(new PgExceptionFilter())
-    create(@Body() folderDto: CreateFolderDto, @Request() req) {
-        folderDto.owner = req.user.id
-        return this.foldersService.create(folderDto)
-    }
+  @Post()
+  @UseInterceptors(new insertTransformInterceptor())
+  create(@Body() folderDto: CreateFolderDto, @Request() req) {
+    folderDto.owner = req.user.id;
+    const results = this.foldersService.create(folderDto);
+    req.output = results.output;
+    return results.dbResult;
+  }
 }

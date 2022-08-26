@@ -1,6 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseFilters } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Post,
+  Request,
+  UseInterceptors,
+} from "@nestjs/common";
 import { Public } from "src/common/decorators/metadata";
-import { PgExceptionFilter } from "src/common/exceptions/pg-exception.filter";
+import { insertTransformInterceptor } from "src/common/interceptors/pg-transform.interceptor";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UsersService } from "./user.service";
 
@@ -10,8 +16,10 @@ export class UsersController {
 
   @Public()
   @Post()
-  @UseFilters(new PgExceptionFilter())
-  create(@Body() userDto: CreateUserDto) {
-    return this.usersService.create(userDto)
+  @UseInterceptors(new insertTransformInterceptor())
+  async create(@Request() req, @Body() userDto: CreateUserDto) {
+    const results = this.usersService.create(userDto);
+    req.output = results.output;
+    return results.dbRes;
   }
 }

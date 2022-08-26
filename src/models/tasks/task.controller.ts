@@ -4,9 +4,9 @@ import {
   Get,
   Post,
   Request,
-  UseFilters,
+  UseInterceptors,
 } from "@nestjs/common";
-import { PgExceptionFilter } from "src/common/exceptions/pg-exception.filter";
+import { insertTransformInterceptor } from "src/common/interceptors/pg-transform.interceptor";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { TasksService } from "./task.service";
 
@@ -20,9 +20,11 @@ export class TasksController {
   }
 
   @Post()
-  @UseFilters(new PgExceptionFilter())
+  @UseInterceptors(new insertTransformInterceptor())
   createTask(@Request() req, @Body() createTaskDto: CreateTaskDto) {
     createTaskDto.owner = req.user.id;
-    return this.tasksService.createTask(createTaskDto);
+    const results = this.tasksService.createTask(createTaskDto);
+    req.output = results.output;
+    return results.dbResult;
   }
 }

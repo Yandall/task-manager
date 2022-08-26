@@ -16,6 +16,6 @@ export class TasksService {
 
   createTask(createTaskDto: CreateTaskDto) {
     const newTask = this.taskRepository.create(createTaskDto);
-    return this.taskRepository.insert(newTask);
+    return { dbResult: this.taskRepository.insert(newTask), output: newTask };
   }
 }
