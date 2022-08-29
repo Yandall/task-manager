@@ -5,6 +5,10 @@ import {
 } from "class-validator";
 import { isValid as fnsIsValid } from "date-fns";
 
+/**
+ * Used to validate a string date. If date is not valid throws an error following the validation pipe.
+ * Use only as a property decorator
+ */
 export function IsValidDate(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
