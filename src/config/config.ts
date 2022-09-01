@@ -7,6 +7,7 @@ export const config = {
   JWT_EXTENDED_TIME: "30 days",
   KEYS: {
     IS_PUBLIC: "isPublic",
+    SKIP_ACL_GUARD: "skipAclGuard",
   },
   DB: {
     HOST: process.env.DB_HOST,
