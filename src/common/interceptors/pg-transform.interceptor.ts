@@ -16,7 +16,7 @@ export interface Response<T> {
  * It is intend to use only in create enpoints
  */
 @Injectable()
-export class insertTransformInterceptor<T>
+export class InsertTransformInterceptor<T>
   implements NestInterceptor<T, Response<T>>
 {
   intercept(
