@@ -1,26 +1,26 @@
+import { IsString } from "class-validator";
 import { formatISO } from "date-fns";
 import { randomId } from "src/common/util";
-import { Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity({ name: "folders" })
-export class Folder {
-  @PrimaryColumn()
+export class CreateFolderDto {
   id: string;
 
-  @Column()
+  @IsString()
   name: string;
 
-  @Column()
   owner: number;
 
-  @Column({ type: "jsonb", default: {} })
-  config: { [key: string]: unknown };
+  config: {};
 
-  @Column()
   createdDate: string;
+
+  updatedDate: string;
+
+  isDeleted: boolean;
 
   constructor() {
     this.id = randomId();
     this.createdDate = formatISO(new Date());
+    this.isDeleted = false;
   }
 }

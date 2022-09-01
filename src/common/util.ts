@@ -1,4 +1,5 @@
 import { randomInt } from "crypto";
+import * as bcrypt from "bcrypt";
 
 /**
  * Creates a random string
@@ -14,4 +15,9 @@ export function randomId(idSize = 12): string {
     id += characters.charAt(randomInt(charLenght));
   }
   return id;
+}
+
+export function hashPassword(password: string) {
+  const salt = bcrypt.genSaltSync();
+  return bcrypt.hashSync(password, salt);
 }

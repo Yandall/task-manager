@@ -1,13 +1,10 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { PrismaService } from "src/prisma.service";
 import { FoldersController } from "./folder.controller";
-import { Folder } from "./folder.entity";
 import { FoldersService } from "./folder.service";
 
-
 @Module({
-    imports: [TypeOrmModule.forFeature([Folder])],
-    controllers: [FoldersController],
-    providers: [FoldersService]
+  controllers: [FoldersController],
+  providers: [FoldersService, PrismaService],
 })
 export class FoldersModule {}

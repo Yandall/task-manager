@@ -1,24 +1,25 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { CreateFolderDto } from "./dto/create-folder.dto";
-import { Folder } from "./folder.entity";
+import { Prisma } from "@prisma/client";
+import { PrismaService } from "src/prisma.service";
+import { CreateFolderDto } from "./dto/folder.dto";
 
 @Injectable()
 export class FoldersService {
-  constructor(
-    @InjectRepository(Folder) private folderRepository: Repository<Folder>
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   findAll(owner: number) {
-    return this.folderRepository.findBy({ owner });
+    return this.prisma.folders.findMany({ where: { owner } });
   }
 
   create(folderDto: CreateFolderDto) {
-    const newFolder = this.folderRepository.create(folderDto);
-    return {
-      dbResult: this.folderRepository.insert(newFolder),
-      output: newFolder,
+    const data: Prisma.foldersCreateInput = {
+      id: folderDto.id,
+      name: folderDto.name,
+      config: folderDto.config,
+      createdDate: folderDto.createdDate,
+      isDeleted: folderDto.isDeleted,
+      user: { connect: { id: folderDto.owner } },
     };
+    return this.prisma.folders.create({ data });
   }
 }

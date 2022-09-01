@@ -2,8 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { config } from "src/config/config";
 import { UsersService } from "src/models/users/user.service";
-import { User } from "src/models/users/user.entity";
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from "bcrypt";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
@@ -20,11 +20,18 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User, keepLogged = false) {
-    const payload = { name: user.name, email: user.email, sub: user.id, config: user.config }
-    const expiresIn = keepLogged? config.JWT_EXTENDED_TIME: config.JWT_DEFAULT_TIME
+  async login(user: Prisma.usersCreateInput, keepLogged = false) {
+    const payload = {
+      name: user.name,
+      email: user.email,
+      sub: user.id,
+      config: user.config,
+    };
+    const expiresIn = keepLogged
+      ? config.JWT_EXTENDED_TIME
+      : config.JWT_DEFAULT_TIME;
     return {
-        accessToken: this.jwtService.sign(payload, {expiresIn}),
-    }
+      accessToken: this.jwtService.sign(payload, { expiresIn }),
+    };
   }
 }

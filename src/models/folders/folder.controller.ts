@@ -6,8 +6,8 @@ import {
   Request,
   UseInterceptors,
 } from "@nestjs/common";
-import { insertTransformInterceptor } from "src/common/interceptors/pg-transform.interceptor";
-import { CreateFolderDto } from "./dto/create-folder.dto";
+import { InsertTransformInterceptor } from "src/common/interceptors/pg-transform.interceptor";
+import { CreateFolderDto } from "./dto/folder.dto";
 import { FoldersService } from "./folder.service";
 
 @Controller("folders")
@@ -20,11 +20,9 @@ export class FoldersController {
   }
 
   @Post()
-  @UseInterceptors(new insertTransformInterceptor())
+  @UseInterceptors(new InsertTransformInterceptor())
   create(@Body() folderDto: CreateFolderDto, @Request() req) {
     folderDto.owner = req.user.id;
-    const results = this.foldersService.create(folderDto);
-    req.output = results.output;
-    return results.dbResult;
+    return this.foldersService.create(folderDto);
   }
 }

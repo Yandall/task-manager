@@ -1,26 +1,24 @@
+import { IsString } from "class-validator";
 import { formatISO } from "date-fns";
 import { randomId } from "src/common/util";
-import { Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity("tags")
-export class Tag {
-  @PrimaryColumn()
+export class CreateTagDto {
   id: string;
 
-  @Column()
+  @IsString()
   name: string;
 
-  @Column()
   owner: number;
 
-  @Column({ type: "jsonb", default: {} })
-  config: { [key: string]: unknown };
+  config: {};
 
-  @Column()
   createdDate: string;
+
+  isDeleted: boolean;
 
   constructor() {
     this.id = randomId();
     this.createdDate = formatISO(new Date());
+    this.isDeleted = false;
   }
 }

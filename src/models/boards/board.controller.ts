@@ -1,30 +1,40 @@
 import {
+  BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
+  Put,
   Request,
-  UseInterceptors,
 } from "@nestjs/common";
-import { insertTransformInterceptor } from "src/common/interceptors/pg-transform.interceptor";
 import { BoardsService } from "./board.service";
-import { CreateBoardDto } from "./dto/create-board.dto";
+import { CreateBoardDto, UpdateBoardDto } from "./dto/board.dto";
 
 @Controller("boards")
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
   @Get()
-  getBoardsByPath(@Request() req) {
+  getBoards(@Request() req) {
     return this.boardsService.findAllByOwner(req.user.id);
   }
 
   @Post()
-  @UseInterceptors(new insertTransformInterceptor())
   createBoard(@Request() req, @Body() createBoardDto: CreateBoardDto) {
     createBoardDto.owner = req.user.id;
-    const results = this.boardsService.createBoard(createBoardDto);
-    req.output = results.output;
-    return results.dbResult;
+    return this.boardsService.createBoard(createBoardDto);
+  }
+
+  @Put(":id")
+  updateBoard(@Param() { id }, @Body() board: UpdateBoardDto) {
+    if (id !== board.id) throw new BadRequestException();
+    return this.boardsService.updateBoard(board);
+  }
+
+  @Delete(":id")
+  deleteBoard(@Param() { id }) {
+    return this.boardsService.deleteBoard(id);
   }
 }

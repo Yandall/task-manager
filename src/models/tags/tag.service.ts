@@ -1,19 +1,25 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { CreateTagDto } from "./dto/create-tags.dto";
-import { Tag } from "./tag.entity";
+import { Prisma } from "@prisma/client";
+import { PrismaService } from "src/prisma.service";
+import { CreateTagDto } from "./dto/tag.dto";
 
 @Injectable()
 export class TagsService {
-  constructor(@InjectRepository(Tag) private tagRepository: Repository<Tag>) {}
+  constructor(private prisma: PrismaService) {}
 
   getTagsByOwner(owner: number) {
-    return this.tagRepository.findBy({ owner });
+    return this.prisma.tags.findMany({ where: { owner } });
   }
 
   createTag(createTagDto: CreateTagDto) {
-    const newTag = this.tagRepository.create(createTagDto);
-    return { dbRes: this.tagRepository.insert(newTag), output: newTag };
+    const data: Prisma.tagsCreateInput = {
+      id: createTagDto.id,
+      name: createTagDto.name,
+      config: createTagDto.config,
+      createdDate: createTagDto.createdDate,
+      isDeleted: createTagDto.isDeleted,
+      user: { connect: { id: createTagDto.owner } },
+    };
+    return this.prisma.tags.create({ data });
   }
 }

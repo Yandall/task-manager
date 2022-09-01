@@ -1,12 +1,10 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { PrismaService } from "src/prisma.service";
 import { TagsController } from "./tag.controller";
-import { Tag } from "./tag.entity";
 import { TagsService } from "./tag.service";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Tag])],
-    controllers: [TagsController],
-    providers: [TagsService]
+  controllers: [TagsController],
+  providers: [TagsService, PrismaService],
 })
 export class TagsModule {}

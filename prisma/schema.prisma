@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model boards {
+  id          String    @id
+  folderId    String
+  owner       Decimal   @db.Decimal
+  config      Json      @default("{}")
+  name        String
+  createdDate DateTime  @db.Timestamptz(6)
+  updatedDate DateTime? @db.Timestamptz(6)
+  isDeleted   Boolean   @default(false)
+  folder      folders   @relation(fields: [folderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user        users     @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tasks       tasks[]
+}
+
+model folders {
+  id          String    @id(map: "folder_pkey")
+  name        String
+  owner       Decimal   @db.Decimal
+  config      Json      @default("{}")
+  createdDate DateTime  @db.Timestamptz(6)
+  updatedDate DateTime? @db.Timestamptz(6)
+  isDeleted   Boolean   @default(false)
+  user        users     @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  boards      boards[]
+}
+
+model tags {
+  id          String    @id
+  name        String
+  owner       Decimal   @db.Decimal
+  config      Json      @default("{}")
+  createdDate DateTime  @db.Timestamptz(6)
+  updatedDate DateTime? @db.Timestamptz(6)
+  isDeleted   Boolean   @default(false)
+  user        users     @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tasks {
+  id          String    @id
+  createdDate DateTime  @db.Timestamptz(6)
+  dueDate     DateTime? @db.Timestamptz(6)
+  owner       Decimal   @db.Decimal
+  boardId     String
+  content     Json      @default("{}")
+  config      Json      @default("{}")
+  updatedDate DateTime? @db.Timestamptz(6)
+  isDeleted   Boolean   @default(false)
+  board       boards    @relation(fields: [boardId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tasks_board_fkey")
+  user        users     @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id          Decimal   @id(map: "Users_pkey") @default(dbgenerated("nextval('users_id'::regclass)")) @db.Decimal
+  email       String    @unique(map: "Users_email_key")
+  password    String
+  name        String
+  config      Json      @default("{}")
+  createdDate DateTime  @db.Timestamptz(6)
+  updatedDate DateTime? @db.Timestamptz(6)
+  isActive    Boolean   @default(false)
+  boards      boards[]
+  folders     folders[]
+  tags        tags[]
+  tasks       tasks[]
+}
