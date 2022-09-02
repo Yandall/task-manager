@@ -22,14 +22,14 @@ export class BoardsController {
 
   @Get()
   @SkipAclGuard()
-  getBoards(@Request() req) {
-    return this.boardsService.findAllByOwner(req.user.id);
+  getBoards(@Request() { user }) {
+    return this.boardsService.findAllByOwner(user.id);
   }
 
   @Post()
   @SkipAclGuard()
-  createBoard(@Request() req, @Body() board: CreateBoardDto) {
-    board.owner = req.user.id;
+  createBoard(@Request() { user }, @Body() board: CreateBoardDto) {
+    board.owner = user.id;
     return this.boardsService.createBoard(board);
   }
 

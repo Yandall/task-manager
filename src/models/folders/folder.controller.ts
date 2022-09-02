@@ -22,14 +22,14 @@ export class FoldersController {
 
   @Get()
   @SkipAclGuard()
-  findAll(@Request() req) {
-    return this.foldersService.findAll(req.user.id);
+  findAll(@Request() { user }) {
+    return this.foldersService.findAll(user.id);
   }
 
   @Post()
   @SkipAclGuard()
-  create(@Body() folder: CreateFolderDto, @Request() req) {
-    folder.owner = req.user.id;
+  create(@Body() folder: CreateFolderDto, @Request() { user }) {
+    folder.owner = user.id;
     return this.foldersService.create(folder);
   }
 
