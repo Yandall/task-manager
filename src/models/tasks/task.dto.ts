@@ -32,3 +32,22 @@ export class CreateTaskDto {
     this.isDeleted = false;
   }
 }
+
+export class UpdateTaskDto {
+  id: string;
+
+  @IsValidDate({ always: false })
+  @Transform(toISOString)
+  dueDate: string;
+
+  @IsObject()
+  content: {};
+
+  config: {};
+
+  updatedDate: string;
+
+  constructor() {
+    this.updatedDate = formatISO(new Date());
+  }
+}
