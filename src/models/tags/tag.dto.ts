@@ -22,3 +22,20 @@ export class CreateTagDto {
     this.isDeleted = false;
   }
 }
+
+export class UpdateTagDto {
+  id: string;
+
+  @IsString()
+  name: string;
+
+  owner: number;
+
+  config: {};
+
+  updatedDate: string;
+
+  constructor() {
+    this.updatedDate = formatISO(new Date());
+  }
+}
