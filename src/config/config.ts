@@ -8,6 +8,7 @@ export const config = {
   KEYS: {
     IS_PUBLIC: "isPublic",
     SKIP_ACL_GUARD: "skipAclGuard",
+    ENTITY: "entity",
   },
   DB: {
     HOST: process.env.DB_HOST,

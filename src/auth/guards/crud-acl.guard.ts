@@ -3,17 +3,6 @@ import { Reflector } from "@nestjs/core";
 import { config } from "src/config/config";
 import { PrismaService } from "src/prisma.service";
 
-/**
- * Sets the entity for the Guard to search the resource.
- * The guard checks if the user that is trying to manipulate a resource is owner of this.
- * @param entity The entity of the resource
- * @returns
- */
-export function getAclEntityGuard(entity: string) {
-  EntityAclGuard.prototype.entity = entity;
-  return EntityAclGuard;
-}
-
 type Entity = {
   id: string;
   owner: string;
@@ -21,11 +10,10 @@ type Entity = {
 
 /**
  * Checks if the user that is trying to manipulate a resource is owner of this.
+ * Use with @EntityName() decorator to set the entity
  */
 @Injectable()
-class EntityAclGuard implements CanActivate {
-  entity: string;
-
+export class EntityAclGuard implements CanActivate {
   constructor(private prisma: PrismaService, private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext) {
@@ -33,11 +21,21 @@ class EntityAclGuard implements CanActivate {
       config.KEYS.SKIP_ACL_GUARD,
       [context.getHandler(), context.getClass()]
     );
-    if (skip) return true;
-    const { user, body } = context.switchToHttp().getRequest();
-    const originalResource: Entity = await this.prisma[this.entity].findUnique({
-      where: { id: body.id },
+    const isPublic = this.reflector.getAllAndOverride<boolean>(
+      config.KEYS.IS_PUBLIC,
+      [context.getHandler(), context.getClass()]
+    );
+    const entity = this.reflector.getAllAndOverride<string>(
+      config.KEYS.ENTITY,
+      [context.getHandler(), context.getClass()]
+    );
+    if (skip || isPublic || !entity) return true;
+    const { user, params } = context.switchToHttp().getRequest();
+    const paramId = params.id;
+    const originalResource: Entity = await this.prisma[entity].findUnique({
+      where: { id: paramId },
     });
+    if (!originalResource) return true;
     return originalResource.owner.toString() === user.id;
   }
 }
