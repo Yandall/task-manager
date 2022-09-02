@@ -24,3 +24,19 @@ export class CreateFolderDto {
     this.isDeleted = false;
   }
 }
+
+export class UpdateFolderDto {
+  @IsString()
+  id: string;
+
+  @IsString()
+  name: string;
+
+  config: {};
+
+  updatedDate: string;
+
+  constructor() {
+    this.updatedDate = formatISO(new Date());
+  }
+}
