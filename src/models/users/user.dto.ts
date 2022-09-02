@@ -22,3 +22,18 @@ export class CreateUserDto {
     this.isActive = false;
   }
 }
+
+export class UpdateUserDto {
+  id: string;
+
+  @IsString()
+  name: string;
+
+  config: {};
+
+  updatedDate: string;
+
+  constructor() {
+    this.updatedDate = formatISO(new Date());
+  }
+}
