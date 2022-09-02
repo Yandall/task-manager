@@ -1,14 +1,12 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
+import { checkForExistance } from "src/common/util";
 import { PrismaService } from "src/prisma.service";
-import { CreateBoardDto, UpdateBoardDto } from "./dto/board.dto";
+import { CreateBoardDto, UpdateBoardDto } from "./board.dto";
 
 @Injectable()
 export class BoardsService {
+  private readonly entityName = "boards";
   constructor(private prisma: PrismaService) {}
 
   findAllByOwner(owner: number) {
@@ -27,7 +25,7 @@ export class BoardsService {
   }
 
   async updateBoard(board: UpdateBoardDto) {
-    await this.checkForExistance(board.id, true);
+    await checkForExistance(board.id, this.entityName, true);
     const folder = board.folderId
       ? { connect: { id: board.folderId } }
       : undefined;
@@ -44,30 +42,10 @@ export class BoardsService {
   }
 
   async deleteBoard(id: string) {
-    await this.checkForExistance(id, true);
+    await checkForExistance(id, this.entityName, true);
     return this.prisma.boards.update({
       where: { id },
       data: { isDeleted: true },
     });
-  }
-
-  /**
-   * Check if an given board exists or is not deleted.
-   * Can throw an error if the board is not valid or return boolean
-   * @param id Id of the board to search
-   * @param throwError If set to true throws error on not found or board deleted. Default false
-   * @returns boolean indicating that the board is valid or not.
-   */
-  async checkForExistance(id: string, throwError = false) {
-    const search = await this.prisma.boards.findUnique({
-      where: { id },
-    });
-    if (!search && throwError) throw new NotFoundException();
-    if (search.isDeleted && throwError)
-      throw new ForbiddenException(
-        "The board is already deleted and cannot be edited",
-        `Board (${id}) doesn't exists`
-      );
-    return search && !search.isDeleted;
   }
 }

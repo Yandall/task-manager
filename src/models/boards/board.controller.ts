@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,28 +7,35 @@ import {
   Post,
   Put,
   Request,
+  UseGuards,
 } from "@nestjs/common";
+import { EntityAclGuard } from "src/auth/guards/crud-acl.guard";
+import { EntityName, SkipAclGuard } from "src/common/decorators/metadata";
 import { BoardsService } from "./board.service";
-import { CreateBoardDto, UpdateBoardDto } from "./dto/board.dto";
+import { CreateBoardDto, UpdateBoardDto } from "./board.dto";
 
 @Controller("boards")
+@EntityName("boards")
+@UseGuards(EntityAclGuard)
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
   @Get()
+  @SkipAclGuard()
   getBoards(@Request() req) {
     return this.boardsService.findAllByOwner(req.user.id);
   }
 
   @Post()
-  createBoard(@Request() req, @Body() createBoardDto: CreateBoardDto) {
-    createBoardDto.owner = req.user.id;
-    return this.boardsService.createBoard(createBoardDto);
+  @SkipAclGuard()
+  createBoard(@Request() req, @Body() board: CreateBoardDto) {
+    board.owner = req.user.id;
+    return this.boardsService.createBoard(board);
   }
 
   @Put(":id")
   updateBoard(@Param() { id }, @Body() board: UpdateBoardDto) {
-    if (id !== board.id) throw new BadRequestException();
+    board.id = id;
     return this.boardsService.updateBoard(board);
   }
 
