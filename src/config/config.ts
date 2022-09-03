@@ -1,5 +1,6 @@
 import { config as env } from "dotenv";
-env();
+const MODE = process.env.MODE;
+env({ path: `enviroment/.${MODE}.env` });
 export const config = {
   PORT: process.env.PORT,
   JWT_SECRET: process.env.JWT_SECRET,
@@ -10,11 +11,6 @@ export const config = {
     SKIP_ACL_GUARD: "skipAclGuard",
     ENTITY: "entity",
   },
-  DB: {
-    HOST: process.env.DB_HOST,
-    PORT: parseInt(process.env.DB_PORT),
-    USERNAME: process.env.DB_USERNAME,
-    PASSWORD: process.env.DB_PASSWORD,
-    NAME: process.env.DB_NAME,
-  },
+  DATABASE_URL: process.env.DATABASE_URL,
 };
+Object.freeze(config);

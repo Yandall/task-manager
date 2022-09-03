@@ -13,6 +13,7 @@ lerna-debug.log*
 
 # Secret
 .env
+/enviroment
 
 # OS
 .DS_Store
