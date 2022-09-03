@@ -4,11 +4,11 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { PgExceptionFilter } from "./common/exceptions/pg-exception.filter";
-import { BoardsModule } from "./models/boards/board.module";
-import { FoldersModule } from "./models/folders/folder.module";
-import { TagsModule } from "./models/tags/tag.module";
-import { TasksModule } from "./models/tasks/task.module";
-import { UsersModule } from "./models/users/user.module";
+import { BoardsModule } from "./boards/board.module";
+import { FoldersModule } from "./folders/folder.module";
+import { TagsModule } from "./tags/tag.module";
+import { TasksModule } from "./tasks/task.module";
+import { UsersModule } from "./users/user.module";
 
 @Module({
   imports: [

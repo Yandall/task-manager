@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 // import { PassportModule } from "@nestjs/passport";  // Aun no se para que se usa
-import { UsersModule } from "src/models/users/user.module";
+import { UsersModule } from "src/users/user.module";
 import { AuthService } from "./auth.service";
 import { LocalStrategy } from "./strategies/local.strategy";
 import { config } from "../config/config";

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { config } from "src/config/config";
-import { UsersService } from "src/models/users/user.service";
+import { UsersService } from "src/users/user.service";
 import * as bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
 
