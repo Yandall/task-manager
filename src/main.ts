@@ -6,7 +6,7 @@ import { config } from "./config/config";
 import { PrismaService } from "./prisma.service";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {cors: true});
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new PgExceptionFilter());
   const prismaService = app.get(PrismaService);
