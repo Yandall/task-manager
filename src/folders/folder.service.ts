@@ -11,7 +11,14 @@ export class FoldersService {
   constructor(private prisma: PrismaService) {}
 
   findAll(owner: number) {
-    return this.prisma.folders.findMany({ where: { owner } });
+    return this.prisma.folders.findMany({
+      select: { id: true, name: true, config: true },
+      where: { owner, isDeleted: false },
+    });
+  }
+
+  findOne(id: string) {
+    return this.prisma.folders.findUnique({ where: { id } });
   }
 
   create(folderDto: CreateFolderDto) {

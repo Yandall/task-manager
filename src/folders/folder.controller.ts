@@ -21,9 +21,13 @@ export class FoldersController {
   constructor(private readonly foldersService: FoldersService) {}
 
   @Get()
-  @SkipAclGuard()
   findAll(@Request() { user }) {
     return this.foldersService.findAll(user.id);
+  }
+
+  @Get(":id")
+  findOne(@Param() { id }) {
+    return this.foldersService.findOne(id);
   }
 
   @Post()
