@@ -32,6 +32,7 @@ export class EntityAclGuard implements CanActivate {
     if (skip || isPublic || !entity) return true;
     const { user, params } = context.switchToHttp().getRequest();
     const paramId = params.id;
+    if (!paramId) return true;
     const originalResource: Entity = await this.prisma[entity].findUnique({
       where: { id: paramId },
     });
