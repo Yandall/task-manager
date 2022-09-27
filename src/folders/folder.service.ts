@@ -12,8 +12,8 @@ export class FoldersService {
 
   findAll(owner: number) {
     return this.prisma.folders.findMany({
-      select: { id: true, name: true, config: true },
       where: { owner, isDeleted: false },
+      select: { id: true, name: true, config: true, boards: true },
     });
   }
 
