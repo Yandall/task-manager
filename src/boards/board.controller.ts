@@ -21,9 +21,13 @@ export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
   @Get()
-  @SkipAclGuard()
   getBoards(@Request() { user }) {
     return this.boardsService.findAllByOwner(user.id);
+  }
+
+  @Get(":id")
+  getOneBoard(@Param() { id }) {
+    return this.boardsService.findOneByOwner(id);
   }
 
   @Post()

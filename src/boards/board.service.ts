@@ -13,6 +13,10 @@ export class BoardsService {
     return this.prisma.boards.findMany({ where: { owner } });
   }
 
+  findOneByOwner(id: string) {
+    return this.prisma.boards.findUnique({ where: { id } });
+  }
+
   createBoard(board: CreateBoardDto) {
     const data: Prisma.boardsCreateInput = {
       id: board.id,
