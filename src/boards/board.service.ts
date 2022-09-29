@@ -14,7 +14,10 @@ export class BoardsService {
   }
 
   findOneByOwner(id: string) {
-    return this.prisma.boards.findUnique({ where: { id } });
+    return this.prisma.boards.findUnique({
+      where: { id },
+      select: { id: true, config: true, name: true, sections: true },
+    });
   }
 
   createBoard(board: CreateBoardDto) {

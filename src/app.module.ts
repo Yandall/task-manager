@@ -9,6 +9,7 @@ import { FoldersModule } from "./folders/folder.module";
 import { TagsModule } from "./tags/tag.module";
 import { TasksModule } from "./tasks/task.module";
 import { UsersModule } from "./users/user.module";
+import { SectionsModule } from "./sections/section.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersModule } from "./users/user.module";
     BoardsModule,
     TagsModule,
     TasksModule,
+    SectionsModule,
   ],
   providers: [
     AppService,

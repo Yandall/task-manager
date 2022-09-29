@@ -15,7 +15,7 @@ export class CreateTaskDto {
   owner: number;
 
   @IsString()
-  boardId: string;
+  sectionId: string;
 
   @IsObject()
   content: {};
@@ -42,6 +42,9 @@ export class UpdateTaskDto {
 
   @IsObject()
   content: {};
+
+  @IsString()
+  sectionId: string;
 
   config: {};
 

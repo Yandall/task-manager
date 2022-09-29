@@ -21,7 +21,7 @@ export class TasksService {
       isDeleted: createTaskDto.isDeleted,
       config: createTaskDto.config,
       user: { connect: { id: createTaskDto.owner } },
-      board: { connect: { id: createTaskDto.boardId } },
+      section: { connect: { id: createTaskDto.sectionId } },
     };
     return this.prisma.tasks.create({ data });
   }
@@ -32,6 +32,7 @@ export class TasksService {
       content: updateTaskDto.content,
       config: updateTaskDto.config,
       dueDate: updateTaskDto.dueDate,
+      section: { connect: { id: updateTaskDto.sectionId } },
       updatedDate: updateTaskDto.updatedDate,
     };
     return this.prisma.tasks.update({ where: { id: updateTaskDto.id }, data });
