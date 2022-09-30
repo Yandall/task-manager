@@ -27,7 +27,7 @@ export class BoardsController {
 
   @Get(":id")
   getOneBoard(@Param() { id }) {
-    return this.boardsService.findOneByOwner(id);
+    return this.boardsService.findOne(id);
   }
 
   @Post()

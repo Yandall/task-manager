@@ -2,22 +2,32 @@ import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import { checkForExistance } from "src/common/util";
 import { PrismaService } from "src/prisma.service";
+import { SectionsService } from "src/sections/section.service";
 import { CreateBoardDto, UpdateBoardDto } from "./board.dto";
 
 @Injectable()
 export class BoardsService {
   private readonly entityName = "boards";
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private sectionsService: SectionsService
+  ) {}
 
   findAllByOwner(owner: number) {
     return this.prisma.boards.findMany({ where: { owner } });
   }
 
-  findOneByOwner(id: string) {
-    return this.prisma.boards.findUnique({
+  async findOne(id: string) {
+    await checkForExistance(id, this.entityName, true);
+    let board = await this.prisma.boards.findUnique({
       where: { id },
-      select: { id: true, config: true, name: true, sections: true },
+      select: { id: true, config: true, name: true, owner: true },
     });
+    const sections = await this.sectionsService.findAllSectionsByBoard(
+      id,
+      Number(board.owner)
+    );
+    return { ...board, sections };
   }
 
   createBoard(board: CreateBoardDto) {
