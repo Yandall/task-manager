@@ -5,7 +5,7 @@ import { PrismaService } from "src/prisma.service";
 
 type Entity = {
   id: string;
-  owner: string;
+  owner: number;
 };
 
 /**
@@ -37,6 +37,6 @@ export class EntityAclGuard implements CanActivate {
       where: { id: paramId },
     });
     if (!originalResource) return true;
-    return originalResource.owner.toString() === user.id;
+    return Number(originalResource.owner) === user.id;
   }
 }
