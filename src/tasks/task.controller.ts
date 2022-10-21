@@ -26,6 +26,11 @@ export class TasksController {
     return this.tasksService.findAllTasksByOwner(req.user.id);
   }
 
+  @Get(":id")
+  getTask(@Param() { id }) {
+    return this.tasksService.findOne(id);
+  }
+
   @Post()
   @SkipAclGuard()
   createTask(@Request() req, @Body() task: CreateTaskDto) {

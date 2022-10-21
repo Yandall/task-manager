@@ -13,6 +13,11 @@ export class TasksService {
     return this.prisma.tasks.findMany({ where: { owner } });
   }
 
+  async findOne(id: string) {
+    await checkForExistance(id, this.entityName, true);
+    return this.prisma.tasks.findUnique({ where: { id } });
+  }
+
   create(createTaskDto: CreateTaskDto) {
     const data: Prisma.tasksCreateInput = {
       id: createTaskDto.id,
@@ -20,6 +25,7 @@ export class TasksService {
       createdDate: createTaskDto.createdDate,
       isDeleted: createTaskDto.isDeleted,
       config: createTaskDto.config,
+      content: createTaskDto.content,
       user: { connect: { id: createTaskDto.owner } },
       section: { connect: { id: createTaskDto.sectionId } },
     };
