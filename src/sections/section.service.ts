@@ -14,6 +14,7 @@ export class SectionsService {
     let sections = await this.prisma.sections.findMany({
       where: { boardId: boardId, isDeleted: false },
       select: { id: true, config: true, tasks: true, owner: true },
+      orderBy: { createdDate: "asc" },
     });
     if (sections.some((section) => section.owner.toNumber() !== owner))
       throw new ForbiddenException();
@@ -47,6 +48,14 @@ export class SectionsService {
     return this.prisma.sections.update({
       where: { id: updateSectionDto.id },
       data,
+    });
+  }
+
+  async delete(id: string) {
+    await checkForExistance(id, this.entityName, true);
+    return this.prisma.sections.update({
+      where: { id },
+      data: { isDeleted: true },
     });
   }
 }

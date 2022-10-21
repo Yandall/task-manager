@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -32,8 +33,13 @@ export class SectionsController {
   }
 
   @Put(":id")
-  update(@Param() { id }, @Body() section: UpdateSectionDto) {
+  updateSection(@Param() { id }, @Body() section: UpdateSectionDto) {
     section.id = id;
     return this.sectionsService.update(section);
+  }
+
+  @Delete(":id")
+  deleteBoard(@Param() { id }) {
+    return this.sectionsService.delete(id);
   }
 }
