@@ -26,6 +26,11 @@ export class SectionsController {
     return this.sectionsService.findAllSectionsByBoard(boardId, user.id);
   }
 
+  @Get()
+  getSectionsByOwner(@Request() { user }) {
+    return this.sectionsService.findAllSectionsByOwner(user.id);
+  }
+
   @Post()
   createSection(@Request() { user }, @Body() section: CreateSectionDto) {
     section.owner = user.id;

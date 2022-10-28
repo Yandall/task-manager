@@ -27,6 +27,12 @@ export class SectionsService {
     });
   }
 
+  findAllSectionsByOwner(owner: number) {
+    return this.prisma.sections.findMany({
+      where: { owner, isDeleted: false },
+    });
+  }
+
   create(createSectionDto: CreateSectionDto) {
     const data: Prisma.sectionsCreateInput = {
       id: createSectionDto.id,
