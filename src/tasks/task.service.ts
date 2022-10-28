@@ -10,7 +10,7 @@ export class TasksService {
   constructor(private prisma: PrismaService) {}
 
   findAllTasksByOwner(owner: number) {
-    return this.prisma.tasks.findMany({ where: { owner } });
+    return this.prisma.tasks.findMany({ where: { owner, isDeleted: false } });
   }
 
   async findOne(id: string) {
