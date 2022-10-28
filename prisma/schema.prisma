@@ -37,7 +37,7 @@ model tags {
   id          String    @id
   name        String
   owner       Decimal   @db.Decimal
-  config      Json      @default("{}")
+  color       String?
   createdDate DateTime  @db.Timestamptz(6)
   updatedDate DateTime? @db.Timestamptz(6)
   isDeleted   Boolean   @default(false)
