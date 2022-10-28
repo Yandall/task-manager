@@ -1,8 +1,10 @@
+import { Transform } from "class-transformer";
 import { IsString } from "class-validator";
 import { formatISO } from "date-fns";
-import { randomId } from "src/common/util";
+import { toNewId } from "src/common/decorators/transformers";
 
 export class CreateSectionDto {
+  @Transform(toNewId)
   id: string;
 
   @IsString()
@@ -17,7 +19,6 @@ export class CreateSectionDto {
   isDeleted: boolean;
 
   constructor() {
-    this.id = randomId();
     this.createdDate = formatISO(new Date());
     this.isDeleted = false;
   }

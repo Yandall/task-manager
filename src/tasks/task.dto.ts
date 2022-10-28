@@ -1,11 +1,11 @@
 import { Transform } from "class-transformer";
 import { IsObject, IsString } from "class-validator";
 import { formatISO } from "date-fns";
-import { toISOString } from "src/common/decorators/transformers";
+import { toISOString, toNewId } from "src/common/decorators/transformers";
 import { IsValidDate } from "src/common/decorators/validators";
-import { randomId } from "src/common/util";
 
 export class CreateTaskDto {
+  @Transform(toNewId)
   id: string;
 
   @IsValidDate({ always: false })
@@ -27,7 +27,6 @@ export class CreateTaskDto {
   isDeleted: boolean;
 
   constructor() {
-    this.id = randomId();
     this.createdDate = formatISO(new Date());
     this.isDeleted = false;
   }
