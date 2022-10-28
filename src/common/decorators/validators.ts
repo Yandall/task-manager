@@ -33,3 +33,28 @@ export function IsValidDate(validationOptions?: ValidationOptions) {
     });
   };
 }
+
+/**
+ * Used to validate if a given propertie is undefined
+ * Checks for "=== undefined, === null"
+ */
+export function IsUndefined(validatorOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      name: "isUndefined",
+      target: object.constructor,
+      propertyName,
+      options: validatorOptions,
+      validator: {
+        validate(value: any, _: ValidationArguments) {
+          if (value === undefined || value === null) return true;
+          return false;
+        },
+        defaultMessage(validationArguments?) {
+          const prop = validationArguments.property;
+          return `Value "${prop}" should be undefined`;
+        },
+      },
+    });
+  };
+}
