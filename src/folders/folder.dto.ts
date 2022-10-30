@@ -2,6 +2,7 @@ import { Transform } from "class-transformer";
 import { IsString } from "class-validator";
 import { formatISO } from "date-fns";
 import { toNewId } from "src/common/decorators/transformers";
+import { randomId } from "src/common/util";
 
 export class CreateFolderDto {
   @Transform(toNewId)
@@ -21,6 +22,7 @@ export class CreateFolderDto {
   isDeleted: boolean;
 
   constructor() {
+    this.id = randomId();
     this.createdDate = formatISO(new Date());
     this.isDeleted = false;
   }
