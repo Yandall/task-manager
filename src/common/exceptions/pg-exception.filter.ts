@@ -5,7 +5,6 @@ import {
   HttpStatus,
 } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
-// import { Prisma } from "@prisma/client";
 import { Response } from "express";
 
 type PgErrorMessage = {
@@ -35,6 +34,7 @@ export class PgExceptionFilter implements ExceptionFilter {
 
   private getErrorResponse(exception: Prisma.PrismaClientKnownRequestError) {
     const errorResponse = this.errorResponses[exception.code];
+    if (!errorResponse) return exception;
     const fields = exception.meta.cause
       ? exception.meta.cause
       : exception.meta.target;
